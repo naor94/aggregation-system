@@ -4,9 +4,11 @@ import operator
 
 app=Flask(__name__)
 
+#This is The array where i save all counters
+
 counters=[]
 
-
+#This is a a function which return the top ten domains
 def makeStats(start_range , end_range):
     filtered = []
     for dict in counters:
@@ -23,6 +25,9 @@ def makeStats(start_range , end_range):
     topTenDomains = sorted(domains_request_counter.items(), key=operator.itemgetter(1), reverse=True)[:10]
     return topTenDomains
 
+#Endpoints
+
+#This is a an endpoint which get the request object and save it in counters array
 
 @app.route('/counters', methods=['POST'])
 def create_counter():
@@ -32,9 +37,13 @@ def create_counter():
     print(request_data)
     return jsonify(request_data)
 
+#This is a an endpoint which returns all counters.
+
 @app.route('/counters')
 def get_conters():
     return jsonify({'counters':counters})
+
+#This is a an endpoint which return the stats for the last whole minute
 
 @app.route('/stats/minutes')
 def get_minutes_stats():
@@ -43,6 +52,8 @@ def get_minutes_stats():
     start_range = end_range - 60
     topTenDomains=makeStats(start_range,end_range)
     return jsonify({"Top ten domains" :topTenDomains})
+
+#This is a an endpoint which return the stats for the last whole hour
 
 @app.route('/stats/hours')
 def get_hours_stats():
